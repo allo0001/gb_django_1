@@ -8,7 +8,7 @@ def index(request):
 
 def products(request):
     context = {
-        'title': 'Товары',
+        'title': 'товары',
     }
     return render(request, 'mainapp/products.html', context)
 
