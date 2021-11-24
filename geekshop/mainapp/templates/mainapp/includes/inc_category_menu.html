@@ -1,7 +1,6 @@
 <ul class="links-menu">
-    <li><a href="#" class="active">все</a></li>
-    <li><a href="#">дом</a></li>
-    <li><a href="#">офис</a></li>
-    <li><a href="#">модерн</a></li>
-    <li><a href="#">классика</a></li>
+    <li><a href="{% url 'products' %}" class="{% if request.resolver_match.url_name == 'products' %}active{% endif %}">Все</a></li>
+    {% for el in links_menu %}
+        <li><a href="{% url 'product_category' el.href %}" class="{% if request.resolver_match.kwargs.name == el.href %}active{% endif %}">{{ el.name }}</a></li>
+    {% endfor %}
 </ul>
