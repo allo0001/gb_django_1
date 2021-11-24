@@ -1,0 +1,22 @@
+[
+  {
+    "city": "Москва",
+    "Phone":"+7-888-888-8888",
+    "Email":"info@geekshop.ru",
+    "address": "В пределах МКАД"
+  },
+  {
+    "city": "Калуга",
+    "Phone":"+7-999-999-9999",
+    "Email":"info_kaluga@geekshop.ru",
+    "address": "В пределах ККАД"
+  },
+    {
+    "city": "Тула",
+    "Phone":"+7-777-777-777",
+    "Email":"info_tula@geekshop.ru",
+    "address": "В пределах ТКАД"
+  }
+]
+
+

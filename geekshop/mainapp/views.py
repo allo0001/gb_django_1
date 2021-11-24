@@ -1,3 +1,6 @@
+import json
+
+from django.conf import settings
 from django.shortcuts import render
 
 
@@ -27,7 +30,9 @@ def products(request, name=None):
 
 
 def contact(request):
-    context = {
-        'title': 'Контакты',
-    }
+    with open(f'{settings.BASE_DIR}/contacts.json', encoding='utf-8') as contacts_file:
+        context = {
+            'title': 'Контакты',
+            'contacts': json.load(contacts_file)
+        }
     return render(request, 'mainapp/contact.html', context)
