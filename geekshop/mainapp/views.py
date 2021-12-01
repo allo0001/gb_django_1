@@ -3,24 +3,24 @@ import json
 from django.conf import settings
 from django.shortcuts import render
 
+from mainapp.models import Product, ProductCategory
 
-links_menu = [
-    {'href': 'home', 'name': 'Дом'},
-    {'href': 'modern', 'name': 'Модерн'},
-    {'href': 'office', 'name': 'Офис'},
-    {'href': 'classic', 'name': 'Классика'},
-]
 
 
 def index(request):
+
+    product_list = Product.objects.all()[:4]
+
     context = {
         'title': 'Магазин',
-
+        'products': product_list,
     }
     return render(request, 'mainapp/index.html', context)
 
 
-def products(request, name=None):
+def products(request, pk=None):
+    links_menu = ProductCategory.objects.all()
+
     context = {
         'title': 'товары',
         'links_menu': links_menu,
