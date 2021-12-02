@@ -1,0 +1,114 @@
+[
+  {
+    "category": "дом",
+    "name": "Кровать 1",
+    "short_desc": "Кровать 1",
+    "description": "Кровать 1",
+    "image": "products_images/product-1.jpg",
+    "price": "10000",
+    "quantity": "10"
+  },
+  {
+    "category": "дом",
+    "name": "Диван 1",
+    "short_desc": "Диван 1",
+    "description": "Диван 1",
+    "image": "products_images/product-1-lg.jpg",
+    "price": "12000",
+    "quantity": "5"
+  },
+  {
+    "category": "дом",
+    "name": "Стол 1",
+    "short_desc": "Стол 1",
+    "description": "Стол 1",
+    "image": "products_images/product-2-sm.jpg",
+    "price": "7500",
+    "quantity": "11"
+  },
+
+  {
+    "category": "офис",
+    "name": "Стол 2",
+    "short_desc": "Стол 2",
+    "description": "Стол 2",
+    "image": "products_images/product-2.jpg",
+    "price": "5000",
+    "quantity": "3"
+  },
+  {
+    "category": "офис",
+    "name": "Стул 1",
+    "short_desc": "Стул 1",
+    "description": "Стул 1",
+    "image": "products_images/product-3.jpg",
+    "price": "2000",
+    "quantity": "16"
+  },
+  {
+    "category": "офис",
+    "name": "Шкаф 1",
+    "short_desc": "Шкаф 1",
+    "description": "Шкаф 1",
+    "image": "products_images/product-4.jpg",
+    "price": "3000",
+    "quantity": "15"
+  },
+
+
+  {
+    "category": "модерн",
+    "name": "Шкаф 2",
+    "short_desc": "Шкаф 2",
+    "description": "Шкаф 2",
+    "image": "products_images/product-11.jpg",
+    "price": "15000",
+    "quantity": "3"
+  },
+  {
+    "category": "модерн",
+    "name": "Диван 2",
+    "short_desc": "Диван 2",
+    "description": "Диван 2",
+    "image": "products_images/product-21.jpg",
+    "price": "20000",
+    "quantity": "2"
+  },
+  {
+    "category": "модерн",
+    "name": "Стол 3",
+    "short_desc": "Стол 3",
+    "description": "Стол 3",
+    "image": "products_images/product-31.jpg",
+    "price": "10000",
+    "quantity": "5"
+  },
+
+  {
+    "category": "классика",
+    "name": "Кровать 2",
+    "short_desc": "Кровать 2",
+    "description": "Кровать 2",
+    "image": "products_images/product-41.jpg",
+    "price": "20000",
+    "quantity": "4"
+  },
+  {
+    "category": "классика",
+    "name": "Диван 3",
+    "short_desc": "Диван 3",
+    "description": "Диван 3",
+    "image": "products_images/product-51.jpg",
+    "price": "200000",
+    "quantity": "1"
+  },
+  {
+    "category": "классика",
+    "name": "Стол 4",
+    "short_desc": "Стол 4",
+    "description": "Стол 4",
+    "image": "products_images/product-61.jpg",
+    "price": "10000",
+    "quantity": "2"
+  }
+]
