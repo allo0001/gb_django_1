@@ -31,7 +31,7 @@ window.onload = function () {
         
         if (target_href) {
             $.ajax({
-                url: "/basket/edit/" + target_href.name + "/" + target_href.value + "/",
+                url: "/basket/edit/" + target_href.name + "/" + target_href.value ,
                 
                 success: function (data) {
                     $('.basket_list').html(data.result);
