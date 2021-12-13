@@ -132,12 +132,12 @@ def products(request, pk):
 
 
 @user_passes_test(lambda u: u.is_superuser)
-def product_create(request, pk):
+def product_create(request):
     if request.method == 'POST':
         form = ProductForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('adminapp:products', args=[pk]))
+            product = form.save()
+            return HttpResponseRedirect(reverse('adminapp:products', args=[product.category.pk]))
     else:
         form = ProductForm()
         context = {
