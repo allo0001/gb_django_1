@@ -133,28 +133,54 @@ def products(request, pk):
 
 
 @user_passes_test(lambda u: u.is_superuser)
-def product_create(request, pk):
+def product_create(request, category_id):
     if request.method == 'POST':
         form = ProductForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect(reverse('adminapp:products', args=[pk]))
+            return HttpResponseRedirect(reverse('adminapp:products', args=[category_id]))
     else:
         form = ProductForm()
         context = {
             'form': form,
+            'category_id': category_id,
         }
         return render(request, 'adminapp/product_form.html', context)
 
 
 @user_passes_test(lambda u: u.is_superuser)
 def product_update(request, pk):
-    pass
+    current_product = get_object_or_404(Product, pk=pk)
+    category_id = current_product.category.pk
+    if request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES, instance=current_product)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('adminapp:products', args=[category_id]))
+    else:
+        form = ProductForm(instance=current_product)
+        context = {
+            'form': form,
+            'category_id': category_id,
+        }
+        return render(request, 'adminapp/product_form.html', context)
 
 
 @user_passes_test(lambda u: u.is_superuser)
 def product_delete(request, pk):
-    pass
+    current_product = get_object_or_404(Product, pk=pk)
+    category_id = current_product.category.pk
+    if request.method == 'POST':
+        current_product.is_active = False
+        current_product.save()
+        return HttpResponseRedirect(reverse('adminapp:products', args=[category_id]))
+    else:
+        form = ProductForm()
+        context = {
+            'object': current_product,
+            'category_id': category_id,
+        }
+        return render(request, 'adminapp/product_delete.html', context)
 
 
 @user_passes_test(lambda u: u.is_superuser)
