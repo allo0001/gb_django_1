@@ -3,7 +3,9 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 
 from authapp.models import ShopUser
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
+from django.utils.decorators import method_decorator
+from django.views.generic import ListView, CreateView
 from mainapp.models import ProductCategory, Product
 
 from authapp.form import ShopUserRegisterForm
@@ -15,12 +17,20 @@ from adminapp.forms import ProductCategoryForm
 from adminapp.forms import ProductForm
 
 
-@user_passes_test(lambda u: u.is_superuser)
-def users(request):
-    context = {
-        'object_list': ShopUser.objects.all().order_by('-is_active')
-    }
-    return render(request, 'adminapp/users_list.html', context=context)
+# @user_passes_test(lambda u: u.is_superuser)
+# def users(request):
+#     context = {
+#         'object_list': ShopUser.objects.all().order_by('-is_active')
+#     }
+#     return render(request, 'adminapp/users_list.html', context=context)
+
+class UserListView(ListView):
+    model = ShopUser
+    template_name = 'adminapp/users_list.html'
+
+    @method_decorator(user_passes_test(lambda u: u.is_superuser))
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
 
 
 @user_passes_test(lambda u: u.is_superuser)
@@ -77,19 +87,25 @@ def categories(request):
     return render(request, 'adminapp/categories_list.html', context=context)
 
 
-@user_passes_test(lambda u: u.is_superuser)
-def category_create(request):
-    if request.method == 'POST':
-        form = ProductCategoryForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('adminapp:categories'))
-    else:
-        form = ProductCategoryForm()
-    context = {
-        'form': form,
-    }
-    return render(request, 'adminapp/category_form.html', context)
+# @user_passes_test(lambda u: u.is_superuser)
+# def category_create(request):
+#     if request.method == 'POST':
+#         form = ProductCategoryForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             form.save()
+#             return HttpResponseRedirect(reverse('adminapp:categories'))
+#     else:
+#         form = ProductCategoryForm()
+#     context = {
+#         'form': form,
+#     }
+#     return render(request, 'adminapp/category_form.html', context)
+
+class ProductCategoryCreateView(CreateView):
+    model = ProductCategory
+    template_name = 'adminapp/category_form.html'
+    form_class = ProductCategoryForm
+    success_url = reverse_lazy('adminapp:categories')
 
 
 @user_passes_test(lambda u: u.is_superuser)
