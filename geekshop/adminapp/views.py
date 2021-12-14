@@ -127,17 +127,18 @@ def category_delete(request, pk):
 def products(request, pk):
     context = {
         'object_list': Product.objects.filter(category__pk=pk),
+        'category_id': pk,
     }
     return render(request, 'adminapp/product_list.html', context=context)
 
 
 @user_passes_test(lambda u: u.is_superuser)
-def product_create(request):
+def product_create(request, pk):
     if request.method == 'POST':
         form = ProductForm(request.POST, request.FILES)
         if form.is_valid():
-            product = form.save()
-            return HttpResponseRedirect(reverse('adminapp:products', args=[product.category.pk]))
+            form.save()
+            return HttpResponseRedirect(reverse('adminapp:products', args=[pk]))
     else:
         form = ProductForm()
         context = {
