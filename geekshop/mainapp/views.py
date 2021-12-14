@@ -68,6 +68,7 @@ def products(request, pk=None):
 
 def product(request, pk=None):
     links_menu = ProductCategory.objects.all()
+
     context = {
         'links_menu': links_menu,
         'product': get_object_or_404(Product, pk=pk),

@@ -185,4 +185,8 @@ def product_delete(request, pk):
 
 @user_passes_test(lambda u: u.is_superuser)
 def product_read(request, pk):
-    pass
+    current_product = get_object_or_404(Product, pk=pk)
+    context = {
+        'object': current_product,
+    }
+    return render(request, 'adminapp/product_read.html', context)
