@@ -5,7 +5,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from authapp.models import ShopUser
 from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
-from django.views.generic import ListView, CreateView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 from mainapp.models import ProductCategory, Product
 
 from authapp.form import ShopUserRegisterForm
@@ -108,60 +108,86 @@ class ProductCategoryCreateView(CreateView):
     success_url = reverse_lazy('adminapp:categories')
 
 
-@user_passes_test(lambda u: u.is_superuser)
-def category_update(request, pk):
-    current_category = get_object_or_404(ProductCategory, pk=pk)
-    if request.method == 'POST':
-        form = ProductCategoryForm(request.POST, request.FILES, instance=current_category)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('adminapp:categories'))
-    else:
-        form = ProductCategoryForm(instance=current_category)
-    context = {
-        'form': form,
-    }
-    return render(request, 'adminapp/category_form.html', context)
+# @user_passes_test(lambda u: u.is_superuser)
+# def category_update(request, pk):
+#     current_category = get_object_or_404(ProductCategory, pk=pk)
+#     if request.method == 'POST':
+#         form = ProductCategoryForm(request.POST, request.FILES, instance=current_category)
+#         if form.is_valid():
+#             form.save()
+#             return HttpResponseRedirect(reverse('adminapp:categories'))
+#     else:
+#         form = ProductCategoryForm(instance=current_category)
+#     context = {
+#         'form': form,
+#     }
+#     return render(request, 'adminapp/category_form.html', context)
 
+class ProductCategoryUpdateView(UpdateView):
+    model = ProductCategory
+    template_name = 'adminapp/category_form.html'
+    form_class = ProductCategoryForm
+    success_url = reverse_lazy('adminapp:categories')
 
-@user_passes_test(lambda u: u.is_superuser)
-def category_delete(request, pk):
-    current_category = get_object_or_404(ProductCategory, pk=pk)
-
-    if request.method == 'POST':
-        current_category.is_active = False
-        current_category.save()
-        return HttpResponseRedirect(reverse('adminapp:categories'))
-    else:
-        context = {
-            'object': current_category,
-        }
-        return render(request, 'adminapp/category_delete.html', context)
-
+# @user_passes_test(lambda u: u.is_superuser)
+# def category_delete(request, pk):
+#     current_category = get_object_or_404(ProductCategory, pk=pk)
+#
+#     if request.method == 'POST':
+#         current_category.is_active = False
+#         current_category.save()
+#         return HttpResponseRedirect(reverse('adminapp:categories'))
+#     else:
+#         context = {
+#             'object': current_category,
+#         }
+#         return render(request, 'adminapp/category_delete.html', context)
+class ProductCategoryDeleteView(DeleteView):
+    model = ProductCategory
+    template_name = 'adminapp/category_delete.html'
+    success_url = reverse_lazy('adminapp:categories')
 
 @user_passes_test(lambda u: u.is_superuser)
 def products(request, pk):
+    category_item = get_object_or_404(ProductCategory, pk=pk)
     context = {
         'object_list': Product.objects.filter(category__pk=pk),
-        'category_id': pk,
+        'category': category_item,
     }
     return render(request, 'adminapp/product_list.html', context=context)
 
 
-@user_passes_test(lambda u: u.is_superuser)
-def product_create(request, category_id):
-    if request.method == 'POST':
-        form = ProductForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('adminapp:products', args=[category_id]))
-    else:
-        form = ProductForm()
-        context = {
-            'form': form,
-            'category_id': category_id,
-        }
-        return render(request, 'adminapp/product_form.html', context)
+# @user_passes_test(lambda u: u.is_superuser)
+# def product_create(request, category_id):
+#     if request.method == 'POST':
+#         form = ProductForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             form.save()
+#             return HttpResponseRedirect(reverse('adminapp:products', args=[category_id]))
+#     else:
+#         form = ProductForm()
+#         context = {
+#             'form': form,
+#             'category_id': category_id,
+#         }
+#         return render(request, 'adminapp/product_form.html', context)
+class ProductCreateView(CreateView):
+    model = Product
+    template_name = 'adminapp/product_form.html'
+    form_class = ProductForm
+    # success_url = reverse_lazy('adminapp:categories')
+
+    def get_success_url(self):
+        category_id = self.kwargs.get('pk')
+        category_item = get_object_or_404(ProductCategory, pk=category_id)
+        return reverse('adminapp:products', args=[category_item.pk])
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        category_id = self.kwargs.get('pk')
+        category_item = get_object_or_404(ProductCategory, pk=category_id)
+        context_data['category'] = category_item
+        return context_data
 
 
 @user_passes_test(lambda u: u.is_superuser)
@@ -199,10 +225,14 @@ def product_delete(request, pk):
         return render(request, 'adminapp/product_delete.html', context)
 
 
-@user_passes_test(lambda u: u.is_superuser)
-def product_read(request, pk):
-    current_product = get_object_or_404(Product, pk=pk)
-    context = {
-        'object': current_product,
-    }
-    return render(request, 'adminapp/product_read.html', context)
+# @user_passes_test(lambda u: u.is_superuser)
+# def product_read(request, pk):
+#     current_product = get_object_or_404(Product, pk=pk)
+#     context = {
+#         'object': current_product,
+#     }
+#     return render(request, 'adminapp/product_read.html', context)
+
+class ProductDetailView(DetailView):
+    model = Product
+    template_name = 'adminapp/product_read.html'
