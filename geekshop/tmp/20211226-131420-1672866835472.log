@@ -1,0 +1,11 @@
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Subject: Account verify
+From: all0@allo.local
+To: allo8@allo.local
+Date: Sun, 26 Dec 2021 10:14:20 -0000
+Message-ID: <164051366029.7688.11627996982867934123@DESKTOP-CHH1L72>
+
+http://localhost:8000/auth/verify/allo8@allo.local/0ec1746add6072dc4aec612910c718c723e19931/
+-------------------------------------------------------------------------------
