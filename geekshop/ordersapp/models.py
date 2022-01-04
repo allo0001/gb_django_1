@@ -1,6 +1,9 @@
 from django.conf import settings
 from django.db import models
 
+from mainapp.models import Product
+
+
 class Order(models.Model):
     STATUS_FORMING = 'FM'
     STATUS_SEN_TO_PROCEED = 'STP'
@@ -19,4 +22,31 @@ class Order(models.Model):
     }
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    status = models.CharField(choices=STATUSES)
+    status = models.CharField(choices=STATUSES, default=STATUS_FORMING, max_length=5)
+
+    is_active = models.BooleanField(default=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def get_total_quantity(self):
+        _items = self.orderitems.select_related()
+        _total_quantity = sum(list(map(lambda x: x.quantity, _items)))
+        return _total_quantity
+
+    def get_total_cost(self):
+        _items = self.orderitems.select_related()
+        _total_cost = sum(list(map(lambda x: x.product_cost, _items)))
+        return _total_cost
+
+
+class OrderItem(models.Model):
+
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, verbose_name='Заказ', related_name='orderitems')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Продукт')
+    quantity = models.PositiveSmallIntegerField(default=1, verbose_name='Количество')
+
+    def get_product_cost(self):
+        return self.product.price * self.quantity
+
+

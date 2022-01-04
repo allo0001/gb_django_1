@@ -5,9 +5,6 @@ from django.urls import path, include
 import mainapp.views as mainapp
 
 
-
-
-
 urlpatterns = [
     path('', mainapp.index, name='index'),
     path('', include('social_django.urls', namespace='social')),
@@ -16,6 +13,7 @@ urlpatterns = [
     path('auth/', include('authapp.urls', namespace='authapp')),
     path('basket/', include('basketapp.urls', namespace='basketapp')),
     path('adminapp/', include('adminapp.urls', namespace='adminapp')),
+    path('orders/', include('orderapp.urls', namespace='orderapp')),
 
     path('contact/', mainapp.contact, name='contact'),
 
