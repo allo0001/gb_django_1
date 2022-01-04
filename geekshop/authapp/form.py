@@ -2,8 +2,8 @@ from datetime import datetime
 
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
 
-from authapp.models import ShopUser
-from django.forms import forms, HiddenInput
+from authapp.models import ShopUser, ShopUserProfile
+from django.forms import forms, HiddenInput, ModelForm
 import random, hashlib
 
 
@@ -59,3 +59,14 @@ class ShopUserEditForm(UserChangeForm):
             field.widget.attrs['class'] = 'form-control'
             if field_name == 'password':
                 field.widget = HiddenInput()
+
+class ShopUserProfileForm(ModelForm):
+
+    class Meta:
+        model = ShopUserProfile
+        fields = ('tagline', 'about_me', 'gender')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
