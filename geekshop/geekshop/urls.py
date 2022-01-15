@@ -13,7 +13,7 @@ urlpatterns = [
     path('auth/', include('authapp.urls', namespace='authapp')),
     path('basket/', include('basketapp.urls', namespace='basketapp')),
     path('adminapp/', include('adminapp.urls', namespace='adminapp')),
-    path('orders/', include('orderapp.urls', namespace='orderapp')),
+    path('orders/', include('ordersapp.urls', namespace='ordersapp')),
 
     path('contact/', mainapp.contact, name='contact'),
 

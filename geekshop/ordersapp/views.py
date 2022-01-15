@@ -1,15 +1,52 @@
-
+from django.db import transaction
+from django.forms import inlineformset_factory
 from django.shortcuts import render
+from django.urls import reverse_lazy
 from django.views.generic import ListView, UpdateView, DetailView, DeleteView, CreateView
+
+from ordersapp.models import Order,OrderItem
+
+from ordersapp.forms import OrderItemForm
 
 
 class OrderListView(ListView):
-    pass
+    model = Order
 
 
 class OrderCreateView(CreateView):
-    pass
+    model = Order
+    fields = []
+    success_url = reverse_lazy('ordersapp:list')
 
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        OrderFormSet = inlineformset_factory(Order, OrderItem, form=OrderItemForm, extra=1)
+
+        if self.request.method == 'POST':
+            formset = OrderFormSet(self.request.POST)
+        else:
+            formset = OrderFormSet()
+
+        context_data['orderitems'] = formset
+
+        return context_data
+
+    def form_valid(self, form):
+        context_data = self.get_context_data()
+        orderitems = context_data['orderitems']
+
+        with transaction.atomic():
+            form.instance.user = self.request.user
+            self.object = form.save()
+
+            if orderitems.is_valid():
+                orderitems.instance = self.object
+                orderitems.save()
+
+        if self.object.get_total_quantity() == 0:
+            self.object.delete()
+
+        return super().form_valid(form)
 
 class OrderUpdateView(UpdateView):
     pass
