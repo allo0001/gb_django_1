@@ -13,7 +13,7 @@ def save_user_profile(backend, user, response, *args, **kwargs):
 
     base_url = 'https://api.vk.com/method/users.get'
     params = {
-        'fields': 'bdate,sex,about',
+        'fields': 'bdate,sex,about,photo_max_orig',
         'access_token': response['access_token'],
         'v': settings.API_VERSION,
     }
@@ -43,5 +43,14 @@ def save_user_profile(backend, user, response, *args, **kwargs):
             user.delete()
             raise AuthForbidden('social_core.backends.vk.VKOAuth2')
         user.age = age
+
+    if 'photo_max_orig' in api_data:
+        avatar_url = api_data['photo_max_orig']
+        avatar_response = requests.get(avatar_url)
+        avatar_path = f'{settings.MEDIA_ROOT}/users/{user.pk}.jpg'
+        with open(avatar_path, 'wb') as avatar_file:
+            avatar_file.write(avatar_response.content)
+
+        user.avatar = f'users/{user.pk}.jpg'
 
     user.save()
