@@ -2,7 +2,7 @@ from django.db import transaction
 from django.db.models.signals import pre_save, pre_delete
 from django.dispatch import receiver
 from django.forms import inlineformset_factory
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, UpdateView, DetailView, DeleteView, CreateView
@@ -12,6 +12,8 @@ from ordersapp.models import Order,OrderItem
 from ordersapp.forms import OrderItemForm
 
 from basketapp.models import Basket
+
+from mainapp.models import Product
 
 
 class OrderListView(ListView):
@@ -139,3 +141,12 @@ def product_quantity_update_on_save(sender, update_fields, instance, **kwargs):
 def product_quantity_update_on_delete(sender, instance, **kwargs):
     instance.product.quantity += instance.quantity
     instance.product.save()
+
+
+def get_product_price(requests, pk):
+    product_price = 0.0
+    product = Product.objects.filter(pk=pk, is_active=True).first()
+    if product:
+        product_price = product.price
+
+    return JsonResponse({'price': product_price})
